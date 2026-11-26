@@ -20,3 +20,11 @@ if (LINE.includes("\n") || LINE.includes("\r")) {
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE, "utf8");
+
+// Read back what was written and verify it is exactly the validated line:
+// a mismatch means the entry on disk is not the entry that was checked.
+import { readFileSync } from "node:fs";
+const written = readFileSync("/output/entry.txt", "utf8");
+if (written !== LINE) {
+  throw new Error("entry.txt on disk does not match the validated line");
+}
